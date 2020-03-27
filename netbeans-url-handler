@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Netbeans URL Handler
+# netbeans://open?url=file://@file&line=@line
+# netbeans://open?file=@file&line=@line
+#
+# @license GPL
+# @author Piotr Kardasz <piotr.kardasz91@gmail.com>
+# Thanks to PHP Storm Handler Author
+# @author Stefan Auditor <stefan.auditor@erdfisch.de>
+
+
+arg=${1}
+pattern=".*file(:\/\/|\=)(.*)&line=(.*)"
+
+# Get the file path.
+file=$(echo "${arg}" | sed -r "s/${pattern}/\2/")
+
+# Get the line number.
+line=$(echo "${arg}" | sed -r "s/${pattern}/\3/")
+
+# Check if netbeans command exist.
+if type netbeans > /dev/null; then
+    /usr/bin/env netbeans --open "${file}:${line}"
+fi
